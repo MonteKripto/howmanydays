@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yaşam Geri Sayımı</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      text-align: center;
+    }
+    .quote {
+      font-style: italic;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      color: #555;
+    }
+    .quote-author {
+      margin-top: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    .counter {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .progress-container {
+      width: 80%;
+      max-width: 500px;
+      background: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .progress {
+      height: 30px;
+      width: 0;
+      background: #4caf50;
+      transition: width 1s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Günün Sözü -->
+  <div class="quote" id="dailyQuote">"..."</div>
+  <div class="quote-author" id="quoteAuthor"></div>
+
+  <div class="counter">Ölmene tahmini kalan gün sayısı: <span id="daysLeft">--</span></div>
+  <div class="progress-container">
+    <div class="progress" id="progressBar"></div>
+  </div>
+
+  <script>
+    // Ayarlamalar
+    const birthDate = new Date(2000, 3, 6);
+    const endDate = new Date(2064, 3, 6);
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const totalDays = Math.ceil((endDate - birthDate) / msPerDay);
+
+    // Alıntılar listesi
+    const quotes = [
+      { text: "Hayat, bisiklete binmek gibidir. Dengenizi korumak için hareket etmeye devam etmelisiniz.", author: "Albert Einstein" },
+      { text: "Kendini tanıyan başkalarını da tanır.", author: "Konfüçyüs" },
+      { text: "Mutluluk, paylaştıkça çoğalır.", author: "Anne Frank" },
+      { text: "Yaptığın şeyleri sev; sonra onları yap.", author: "Ray Bradbury" },
+      { text: "Bilgi, mutluluğun anlık değil, sürekli hâlidir.", author: "Aristoteles" },
+      { text: "Hayat, cesur olana fırsatlar sunar.", author: "Virgil" },
+      { text: "Düşünmek bir maceradır.", author: "Ralph Waldo Emerson" },
+      { text: "En büyük zafer, kendini yenebilmektir.", author: "Platon" },
+      { text: "Zamanımız sınırlı, bunu başkalarının hayatını yaşayarak harcamayalım.", author: "Steve Jobs" },
+      { text: "Hayat, ne yapacağınızı planladığınız sırada başınıza gelenlerdir.", author: "John Lennon" },
+      { text: "Acı, mutluluğu daha değerli kılar.", author: "Seneca" },
+      { text: "Tek yapabildiğimiz en iyi arkadaşı kendimiz olmaktır.", author: "Henry David Thoreau" },
+      { text: "Güzel şeyler zaman alır; sabır en büyük erdemdir.", author: "Maya Angelou" },
+      { text: "Kötü bir hayat, düşüncesizce yaşanmış bir hayattır.", author: "Sokrates" },
+      { text: "Yarın, bugünden yaptıklarımızın toplamıdır.", author: "Ralph Waldo Emerson" },
+      { text: "Mutluluk, yolculuğun kendisidir, varış noktası değil.", author: "Buddha" },
+      { text: "Kelimeler yel gibidir; bir kez bırakıldı mı asla geri dönmez.", author: "Oscar Wilde" },
+      { text: "Her ne yaparsan yap, aşkla yap.", author: "Kahlil Gibran" },
+      { text: "Kendini keşfetmek, büyük bir maceradır.", author: "Carl Jung" },
+      { text: "Bugün, gerçekte sahip olduğumuz tek zamandır.", author: "Thich Nhat Hanh" }
+    ];
+
+    function updateCountdown() {
+      const now = new Date();
+      const daysLeft = Math.ceil((endDate - now) / msPerDay);
+      const daysPassed = totalDays - daysLeft;
+      const progressPercent = Math.min(100, Math.max(0, (daysPassed / totalDays) * 100));
+
+      document.getElementById('daysLeft').textContent = daysLeft;
+      document.getElementById('progressBar').style.width = progressPercent + '%';
+    }
+
+    function updateQuote() {
+      const now = new Date();
+      // Gün sayısı üzerinden seçim
+      const quoteIndex = Math.floor((now - new Date(now.getFullYear(),0,1)) / msPerDay) % quotes.length;
+      const quote = quotes[quoteIndex];
+      document.getElementById('dailyQuote').textContent = `"${quote.text}"`;
+      document.getElementById('quoteAuthor').textContent = `- ${quote.author}`;
+    }
+
+    // İlk çalıştırma
+    updateQuote();
+    updateCountdown();
+    // Her gün güncellemek için saatlik kontrol
+    setInterval(() => {
+      updateQuote();
+      updateCountdown();
+    }, 60 * 60 * 1000);
+  </script>
+</body>
+</html>
